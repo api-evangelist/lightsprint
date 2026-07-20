@@ -1,0 +1,42 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/SprintsAI/n8n-nodes-lightsprint/blob/main/credentials/LightsprintOAuth2Api.credentials.ts
+notes: >-
+  Lightsprint publishes no OpenAPI document, so this profile was NOT derived from a
+  spec. It is captured from the provider's own published OAuth 2.0 credential
+  definition in the first-party n8n community node, corroborated by the on-demand
+  browser OAuth flow described in the Claude Code plugin README. Values are recorded
+  verbatim from those sources.
+docs: https://github.com/SprintsAI/n8n-nodes-lightsprint
+summary:
+  types: [oauth2]
+  api_key_in: []
+  oauth2_flows: [authorizationCode]
+  token_placement: header
+  token_refresh: automatic (CLI refreshes saved tokens)
+schemes:
+- name: LightsprintOAuth2Api
+  type: oauth2
+  display_name: Lightsprint OAuth2 API
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://lightsprint.ai/oauth/authorize
+    tokenUrl: https://lightsprint.ai/oauth/token
+    scope_count: 7
+    scopes_artifact: scopes/lightsprint-scopes.yml
+  sources:
+  - https://github.com/SprintsAI/n8n-nodes-lightsprint/blob/main/credentials/LightsprintOAuth2Api.credentials.ts
+verification:
+  endpoint: GET /api/repo-key/info
+  base_url: https://lightsprint.ai
+  purpose: credential test — resolves the caller's repo/workspace id from the access
+    token
+tenancy:
+  unit: workspace
+  note: >-
+    An access token is bound to one Lightsprint workspace; the repo id is resolved
+    from the token via /api/repo-key/info rather than being passed by the client.
+gaps:
+- No public, human-readable authentication documentation page was found on
+  lightsprint.ai — the auth contract is only discoverable from the published client
+  source. No API-key alternative, no OIDC discovery document, no mutualTLS.
