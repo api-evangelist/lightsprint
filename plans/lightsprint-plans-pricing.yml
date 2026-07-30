@@ -1,0 +1,90 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Lightsprint
+providerId: lightsprint
+created: '2026-07-19'
+modified: '2026-07-19'
+reconciled: true
+generated: '2026-07-19'
+method: searched
+tags:
+- Developer Tools
+- AI
+- Agents
+- Project Management
+- Software Development
+description: >-
+  Lightsprint prices per seat per month with a bundled monthly credit allowance.
+  Credits are consumed by plan generation, task generation, and task execution, and are
+  described by Lightsprint as "equivalent in token spend". All self-serve tiers offer a
+  free trial with no credit card required; Enterprise is custom-quoted.
+sources:
+- https://lightsprint.ai/pricing
+plans:
+- id: lightsprint-hobbyist
+  name: Hobbyist
+  type: subscription
+  description: For individuals getting started.
+  entries:
+  - {label: Monthly subscription, name: seat, type: recurring, metric: user, limit: 1,
+    timeFrame: month, unit: 1, price: $29, userMultiplied: false}
+  - {label: Included credits, name: credits, type: metered, metric: credit, limit: 10000000,
+    timeFrame: month, unit: 1, price: included, userMultiplied: false}
+  features:
+  - 1 user
+  - AI-generated plans and tasks
+  - Visual planning with Plan Mode
+  - Live preview per change
+  - GitHub integration
+  - Codex (GPT models including GPT 5.5)
+  - Claude (including Opus 4.8 and Fable 5)
+  - Email support
+  trial: {available: true, credit_card_required: false}
+- id: lightsprint-team
+  name: Team
+  type: subscription
+  popular: true
+  description: For small teams shipping together.
+  entries:
+  - {label: Monthly subscription, name: seat, type: recurring, metric: user, limit: 5,
+    timeFrame: month, unit: 1, price: $125, userMultiplied: false}
+  - {label: Included credits, name: credits, type: metered, metric: credit, limit: 40000000,
+    timeFrame: month, unit: 1, price: included, userMultiplied: false}
+  features:
+  - Up to 5 users
+  - Everything in Hobbyist
+  - 40M credits for plan generation, task generation, and task execution
+  - Bring your own API key (BYOK)
+  - Shared workspace
+  - Slack integration
+  trial: {available: true, credit_card_required: false}
+- id: lightsprint-enterprise
+  name: Enterprise
+  type: custom
+  description: For organizations with custom needs; tailored to team size and usage.
+  entries:
+  - {label: Custom pricing, name: custom, type: negotiated, metric: contract, limit: -1,
+    timeFrame: year, unit: 1, price: Custom, userMultiplied: false}
+  features:
+  - Unlimited users
+  - Everything in Team
+  - Usage analytics
+  - Priority support
+  - Custom setup of cloud environment for codebase
+  - SOC 2 Type II (in progress)
+  - Audit logs and access controls
+  - Preview environments per ticket
+  - Neon database setup per ticket
+  - Dedicated Slack support channel
+  - Custom integrations
+  - Dedicated account manager
+  - On-premise / VPC deployment
+  contact: https://lightsprint.cal.com/benong/lightsprint-15-demo
+notes:
+- >-
+  Metering is credit-based, not request-based; no published per-endpoint API rate limits
+  were found (see conventions/lightsprint-conventions.yml).
+- >-
+  Bring-your-own-API-key (BYOK) from the Team tier up lets customers route model spend
+  through their own provider accounts.

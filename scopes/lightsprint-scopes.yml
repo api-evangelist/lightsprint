@@ -1,0 +1,66 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/SprintsAI/n8n-nodes-lightsprint/blob/main/credentials/LightsprintOAuth2Api.credentials.ts
+notes: >-
+  Scope strings are recorded verbatim from the default `scope` value in the
+  provider's published OAuth 2.0 credential definition. Lightsprint publishes no
+  scopes/permissions reference page, so the descriptions below are honest readings of
+  each scope's resource:action shape mapped to the API operations the n8n node calls
+  under that scope — they are not quoted provider prose.
+docs: null
+schemes:
+- name: LightsprintOAuth2Api
+  source: https://github.com/SprintsAI/n8n-nodes-lightsprint/blob/main/credentials/LightsprintOAuth2Api.credentials.ts
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://lightsprint.ai/oauth/authorize
+    tokenUrl: https://lightsprint.ai/oauth/token
+scopes:
+- scope: tasks:read
+  description: Read tasks on the workspace board.
+  flows: [authorizationCode]
+  observed_operations:
+  - 'GET /api/repos/{repoId}/tasks'
+  - 'GET /api/tasks/{taskId}'
+- scope: tasks:write
+  description: Create, update, delete, and claim tasks.
+  flows: [authorizationCode]
+  observed_operations:
+  - 'POST /api/repos/{repoId}/tasks'
+  - 'PATCH /api/tasks/{taskId}'
+  - 'DELETE /api/tasks/{taskId}'
+  - 'POST /api/tasks/{taskId}/claim'
+- scope: kanban:read
+  description: Read the kanban board structure — stacks, sections, and task ordering.
+  flows: [authorizationCode]
+  observed_operations: []
+- scope: comments:write
+  description: Create, update, and delete comments on tasks.
+  flows: [authorizationCode]
+  observed_operations:
+  - 'POST /api/tasks/{taskId}/comments'
+  - 'PATCH /api/comments/{commentId}'
+  - 'DELETE /api/comments/{commentId}'
+- scope: agents:write
+  description: Launch and stop cloud coding agents against a task.
+  flows: [authorizationCode]
+  observed_operations:
+  - 'POST /api/tasks/{taskId}/cloud-agents/{provider}'
+  - 'DELETE /api/tasks/{taskId}/cloud-agents/{provider}'
+- scope: plans:read
+  description: Read generated plans (Plan Mode output).
+  flows: [authorizationCode]
+  observed_operations: []
+- scope: plans:write
+  description: Create and modify plans.
+  flows: [authorizationCode]
+  observed_operations: []
+observations:
+- The published default scope set is granted as a single space-delimited string; no
+  incremental or per-operation scope negotiation is documented.
+- 'There is no `comments:read` scope in the default set even though the node reads
+  comments via GET /api/tasks/{taskId}/comments — reads there appear to be covered by
+  tasks:read.'
+gaps:
+- No public scopes/permissions reference page exists on lightsprint.ai; scopes are only
+  discoverable from the published n8n credential source.

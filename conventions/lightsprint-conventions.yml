@@ -1,0 +1,109 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  https://github.com/SprintsAI/n8n-nodes-lightsprint (transport.ts, Lightsprint.node.ts)
+  and https://github.com/SprintsAI/lightsprint-claude-code-plugin (skills/*/SKILL.md)
+notes: >-
+  Lightsprint publishes no API reference or conventions page. Everything below is read
+  off the provider's own published client source and skill documentation. Anything not
+  evidenced there is recorded as `documented: false` / null rather than assumed.
+base_url:
+  api: https://lightsprint.ai
+  cli_default: https://app.lightsprint.ai
+  self_hosted_override: LIGHTSPRINT_BASE_URL environment variable
+  note: >-
+    The n8n node targets https://lightsprint.ai; the CLI defaults to
+    https://app.lightsprint.ai. Both are first-party published values.
+authentication:
+  style: OAuth 2.0 authorization-code bearer token in the Authorization header
+  tenancy: token is bound to a workspace; repo id resolved server-side via
+    GET /api/repo-key/info
+  see: authentication/lightsprint-authentication.yml
+idempotency:
+  documented: false
+  header: null
+  note: >-
+    No idempotency key header, parameter, or retry-safety contract appears in any
+    published Lightsprint client source or skill documentation. Writes
+    (POST /api/repos/{repoId}/tasks, POST /api/tasks/{taskId}/claim) are not documented
+    as idempotent. No Idempotency pointer is emitted for this provider.
+pagination:
+  documented: true
+  style: limit-offset
+  params:
+    limit: {default: 20, max: 100, note: server-enforced maximum}
+    offset: {default: 0}
+  streaming:
+    flag: --page-all
+    format: NDJSON — one JSON object per line, ignores limit/offset
+  sort:
+    param: sort
+    values: [position, updated_at, created_at]
+    default: position
+    note: >-
+      `position` is board order; the n8n node also exposes `newest`/`oldest` sort
+      labels over the same field.
+filtering:
+  documented: true
+  params:
+  - {name: status, values: [backlog, todo, in_progress, in_review, done], multi: true}
+  - {name: complexity, values: [low, medium, high]}
+  - {name: assignee, match: case-insensitive substring on name or email}
+  - {name: mine, type: boolean}
+  - {name: unassigned, type: boolean}
+  - {name: project, values: [<projectId>, 'none'], multi: true}
+  - {name: stack, accepts: [stackId, task prefix, name]}
+  - {name: deps, values: [has-dependencies, has-no-dependencies, has-dependents, unblocked]}
+sparse_fieldsets:
+  documented: true
+  param: fields
+  note: >-
+    Comma-separated field list on `get` and `tasks`; implies JSON output. Top-level
+    selectable: task, dependencies, dependents. Within task: id, title, status,
+    assignee, complexity, description, todoList, relatedFiles, creator.
+field_expansion:
+  documented: false
+identifier_resolution:
+  documented: true
+  note: >-
+    Task identifiers are resolved server-side and accept three interchangeable forms:
+    raw id, display id (e.g. LIG-024), or bare task number (e.g. 24).
+  display_id_format: <STACK_PREFIX>-<zero-padded number>
+metadata:
+  documented: true
+  note: >-
+    Cross-system linkage uses a Claude Code task `metadata` object carrying
+    `lightsprint_task_id`, which keeps a local session task in sync with the board.
+request_tracing:
+  documented: false
+  request_id_header: null
+versioning:
+  documented: false
+  scheme: unversioned path
+  note: >-
+    All observed endpoints sit under a bare /api/ prefix with no version segment,
+    header, or date pin. See lifecycle/lightsprint-lifecycle.yml.
+error_envelope:
+  documented: false
+  format: null
+  note: >-
+    No published error reference, error-code registry, or problem+json contract was
+    found. The n8n node wraps whatever the API returns in a generic NodeApiError, which
+    reveals no envelope shape. No errors/ artifact is emitted rather than inventing one.
+rate_limiting:
+  documented: false
+  headers: null
+  note: >-
+    No rate-limit headers or published limits were found. Commercial plans meter
+    "credits" (10M/40M per month by tier) rather than requests — see plans/.
+validation_limits:
+  documented: true
+  task_title_max_chars: 500
+  task_description_max_chars: 50000
+  page_size_max: 100
+cross_references:
+  authentication: authentication/lightsprint-authentication.yml
+  scopes: scopes/lightsprint-scopes.yml
+  lifecycle: lifecycle/lightsprint-lifecycle.yml
+  data_model: data-model/lightsprint-data-model.yml
+  cli: cli/lightsprint-cli.yml

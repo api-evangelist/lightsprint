@@ -1,0 +1,59 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: >-
+  https://github.com/SprintsAI/n8n-nodes-lightsprint/blob/main/nodes/Lightsprint/Lightsprint.node.ts
+notes: >-
+  Lightsprint publishes NO MCP server — hosted, remote, or local. Its agent-facing
+  surface is a Claude Code plugin of Agent Skills (see skills/) that shell out to the
+  `lightsprint` CLI. The tool list below is a CANDIDATE derived from the REST
+  operations the first-party n8n node actually calls; it is a design proposal from the
+  API Evangelist pipeline, not a Lightsprint product. No `MCPServer` pointer is wired
+  into apis.yml for this reason.
+server:
+  name: lightsprint
+  transport: null
+  url: null
+  published: false
+searched:
+- {location: 'https://lightsprint.ai/', result: none}
+- {location: 'https://lightsprint.ai/docs', result: 404}
+- {location: 'github.com/SprintsAI', result: 'no MCP server repo (2 public repos: Claude
+    Code plugin, n8n node)'}
+- {location: npm registry, result: no @lightsprint or lightsprint MCP package}
+- {location: /.well-known/ai-plugin.json, result: 404}
+auth:
+  proposed: OAuth 2.0 authorization-code, reusing the existing authorization server
+  see: authentication/lightsprint-authentication.yml
+tools:
+- {name: get_repo_info, description: Resolve the workspace and repo bound to the current
+    token, source_operation: 'GET /api/repo-key/info'}
+- {name: list_tasks, description: List tasks on the workspace board with status,
+    complexity, assignee, project, stack, and dependency filters, source_operation: 'GET
+    /api/repos/{repoId}/tasks'}
+- {name: get_task, description: Get full details of a single task, source_operation: 'GET
+    /api/tasks/{taskId}'}
+- {name: create_task, description: Create a task in a stack, source_operation: 'POST
+    /api/repos/{repoId}/tasks'}
+- {name: update_task, description: Update a task's fields or dependencies, source_operation: 'PATCH
+    /api/tasks/{taskId}'}
+- {name: delete_task, description: Delete a task, source_operation: 'DELETE
+    /api/tasks/{taskId}'}
+- {name: claim_task, description: 'Claim a task: set it in_progress and assign it',
+  source_operation: 'POST /api/tasks/{taskId}/claim'}
+- {name: list_comments, description: List comments on a task, source_operation: 'GET
+    /api/tasks/{taskId}/comments'}
+- {name: create_comment, description: Add a comment to a task, source_operation: 'POST
+    /api/tasks/{taskId}/comments'}
+- {name: update_comment, description: Edit a comment, source_operation: 'PATCH
+    /api/comments/{commentId}'}
+- {name: delete_comment, description: Delete a comment, source_operation: 'DELETE
+    /api/comments/{commentId}'}
+- {name: list_cloud_agents, description: List cloud agent runs on a task,
+  source_operation: 'GET /api/tasks/{taskId}/cloud-agents'}
+- {name: launch_cloud_agent, description: Launch a cloud coding agent (anthropic, cursor,
+    or codex) against a task, source_operation: 'POST /api/tasks/{taskId}/cloud-agents/{provider}'}
+- {name: stop_cloud_agent, description: Stop a running cloud agent, source_operation: 'DELETE
+    /api/tasks/{taskId}/cloud-agents/{provider}'}
+- {name: get_cloud_agent_settings, description: Read workspace-level cloud agent
+    settings, source_operation: 'GET /api/cloud-agents/settings'}

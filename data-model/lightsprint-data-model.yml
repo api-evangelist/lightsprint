@@ -1,0 +1,108 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  https://github.com/SprintsAI/n8n-nodes-lightsprint (Lightsprint.node.ts,
+  TaskDescription.ts, CommentDescription.ts, AgentDescription.ts) and
+  https://github.com/SprintsAI/lightsprint-claude-code-plugin/tree/main/skills
+notes: >-
+  Derived from the provider's published client source and skill docs, not from an
+  OpenAPI document (Lightsprint publishes none). Entities and relationships are only
+  recorded where an API path, filter parameter, or documented field evidences them.
+entities:
+- name: Workspace
+  description: Top-level tenant an OAuth token is bound to. The CLI stores exactly one
+    active workspace connection at a time.
+  evidence: CLI connect/disconnect/status/whoami operate on "the connected workspace";
+    token→repo resolution via GET /api/repo-key/info
+  relationships:
+  - {kind: has_many, target: Stack}
+  - {kind: has_many, target: Project}
+  - {kind: has_one, target: Repo, via: repo}
+- name: Repo
+  description: Codebase bound to a workspace; the unit tasks are created against.
+  id_field: repo.id
+  evidence: GET /api/repo-key/info returns `repo.id`; tasks are created at
+    POST /api/repos/{repoId}/tasks
+  relationships:
+  - {kind: has_many, target: Task, via: repoId}
+- name: Stack
+  description: Grouping of tasks within a workspace. Carries a task prefix used to build
+    display IDs (e.g. LIG-024). One stack is the workspace default.
+  addressable_by: [stackId, task prefix, name]
+  evidence: '`lightsprint stacks`, `lightsprint stacks get <stackId|prefix|name>`,
+    --stack <ref> on tasks/create'
+  relationships:
+  - {kind: has_many, target: Task}
+  - {kind: belongs_to, target: Workspace}
+- name: Project
+  description: Optional grouping applied to a task; tasks may have no project.
+  id_field: projectId
+  evidence: '`lightsprint projects`; --project <projectId|none> filter; project field
+    on create/update'
+  relationships:
+  - {kind: has_many, target: Task, via: project}
+  - {kind: belongs_to, target: Workspace}
+- name: Task
+  description: Core work item on the board.
+  id_field: id
+  display_id: '<STACK_PREFIX>-<number>, e.g. LIG-024'
+  id_resolution: raw id, display id, or bare task number — all resolved server-side
+  fields:
+  - {name: id, type: string}
+  - {name: title, type: string, max: 500, required: true}
+  - {name: description, type: string, max: 50000}
+  - {name: status, type: enum, values: [backlog, todo, in_progress, in_review, done]}
+  - {name: complexity, type: enum, values: [low, medium, high]}
+  - {name: assignee, type: string}
+  - {name: creator, type: string}
+  - {name: position, type: integer, note: 0-based order within section}
+  - {name: todoList, type: array, note: implementation steps with completion state}
+  - {name: relatedFiles, type: array}
+  - {name: project, type: reference, target: Project}
+  - {name: dependencyTaskIds, type: array, target: Task}
+  relationships:
+  - {kind: belongs_to, target: Repo, via: repoId}
+  - {kind: belongs_to, target: Stack, via: stack}
+  - {kind: belongs_to, target: Project, via: project}
+  - {kind: has_many, target: Comment}
+  - {kind: has_many, target: CloudAgent}
+  - {kind: has_many, target: Task, via: dependencies, note: tasks this task waits on
+      (prerequisites / child tasks)}
+  - {kind: has_many, target: Task, via: dependents, note: tasks blocked by this task
+      (parent / root tasks)}
+  - {kind: has_one, target: Task, via: parent, note: a root task is a task with no parent;
+      only root tasks can be claimed}
+- name: Comment
+  description: Threaded note on a task.
+  id_field: commentId
+  fields:
+  - {name: body, type: string, required: true}
+  relationships:
+  - {kind: belongs_to, target: Task, via: taskId}
+- name: CloudAgent
+  description: A cloud coding agent run launched against a task, scoped to a model
+    provider.
+  addressed_by: '{taskId, provider}'
+  fields:
+  - {name: provider, type: enum, values: [anthropic, cursor, codex]}
+  - {name: model, type: string}
+  - {name: baseRef, type: string, note: git ref the agent branches from}
+  - {name: environmentId, type: string}
+  relationships:
+  - {kind: belongs_to, target: Task, via: taskId}
+- name: CloudAgentSettings
+  description: Workspace-level cloud agent configuration.
+  evidence: GET /api/cloud-agents/settings
+  relationships:
+  - {kind: belongs_to, target: Workspace}
+dependency_semantics:
+  note: >-
+    Lightsprint's dependency direction is documented explicitly and is the inverse of
+    some common phrasing: a PARENT task DEPENDS ON its listed dependencies, and those
+    dependencies are the CHILD / prerequisite tasks that must complete first.
+  equivalences:
+    depends_on: [blocked by, requires, has prerequisites]
+    dependency: [prerequisite, child task]
+    dependent: [parent task, root task]
+  source: https://github.com/SprintsAI/lightsprint-claude-code-plugin/blob/main/skills/create/SKILL.md
+render: null

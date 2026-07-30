@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: https://registry.npmjs.org/
+notes: >-
+  Both packages are published from the first-party SprintsAI GitHub org
+  (github.com/SprintsAI, org display name "Lightsprint"), which is linked from the
+  lightsprint.ai homepage footer. No PyPI, Maven Central, NuGet, pkg.go.dev,
+  RubyGems, Packagist or crates.io packages were found for Lightsprint.
+packages:
+- language: javascript
+  registry: npm
+  name: lightsprint
+  version: 0.6.4
+  url: https://www.npmjs.com/package/lightsprint
+  install: npx lightsprint
+  description: Sync Claude Code tasks to Lightsprint repo board. Installs the Claude
+    Code plugin and the `lightsprint` CLI binary.
+  repository: https://github.com/SprintsAI/lightsprint-claude-code-plugin
+  kind: cli-plus-plugin
+  official: true
+- language: typescript
+  registry: npm
+  name: n8n-nodes-lightsprint
+  version: 0.1.5
+  url: https://www.npmjs.com/package/n8n-nodes-lightsprint
+  install: npm install n8n-nodes-lightsprint
+  description: n8n community node for Lightsprint — manage tasks, comments, and AI
+    agents. Ships the LightsprintOAuth2Api credential type.
+  repository: https://github.com/SprintsAI/n8n-nodes-lightsprint
+  license: MIT
+  kind: integration-node
+  official: true
+registries_checked:
+- {registry: npm, result: 2 first-party packages}
+- {registry: pypi, result: none}
+- {registry: maven-central, result: none}
+- {registry: nuget, result: none}
+- {registry: pkg.go.dev, result: none}
+- {registry: rubygems, result: none}
+- {registry: packagist, result: none}
+- {registry: crates.io, result: none}
+gaps:
+- No conventional server-side SDK (no `@lightsprint/sdk` or equivalent) is published
+  for the REST API; integration is via the CLI, the Claude Code plugin, or the n8n node.

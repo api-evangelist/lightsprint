@@ -1,0 +1,14 @@
+# Starter
+
+> Starter Astro site for a Ploy tenant website. This site should be customized with the tenant's brand, pages, services, and public content.
+
+This file is generated from the site's source content. It is a curated index for AI assistants, not a crawler permissions file. For crawler permissions, see `/robots.txt`.
+
+## Core Pages
+
+- [Home](https://lightsprint.ai/): Primary overview of the site.
+
+## Discovery
+
+- [Sitemap](https://lightsprint.ai/sitemap-index.xml): Complete search-engine sitemap, if available.
+- [Robots policy](https://lightsprint.ai/robots.txt): Crawler permissions for automated agents.

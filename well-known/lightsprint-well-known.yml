@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+host: https://lightsprint.ai
+notes: >-
+  All five standard discovery documents were probed on the primary host. None are
+  served. Recorded as an honest negative result — no raw files were saved because
+  nothing returned 200. Note that lightsprint.ai returns a real 404 for unknown paths
+  (verified against /docs and /changelog), so these are genuine misses, not soft 404s.
+documents:
+- {path: /.well-known/security.txt, status: 404}
+- {path: /.well-known/openid-configuration, status: 404}
+- {path: /.well-known/oauth-authorization-server, status: 404}
+- {path: /.well-known/api-catalog, status: 404}
+- {path: /.well-known/ai-plugin.json, status: 404}
+related:
+- path: /llms.txt
+  status: 200
+  file: ../llms/lightsprint-llms.txt
+  note: served, but is the unmodified default from the site's Astro template
+gaps:
+- >-
+  No /.well-known/oauth-authorization-server document despite Lightsprint running a
+  real OAuth 2.0 authorization server at /oauth/authorize and /oauth/token — publishing
+  RFC 8414 metadata there would make the auth surface machine-discoverable.
+- No RFC 9116 security.txt.

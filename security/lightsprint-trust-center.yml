@@ -1,0 +1,33 @@
+generated: '2026-07-19'
+method: searched
+source: https://lightsprint.ai/pricing
+url: https://app.vanta.com/lightsprint.ai/trust/qxpamv7k3cq49uprlla9yh
+provider: Vanta
+notes: >-
+  Lightsprint operates a hosted Vanta trust center, linked from its own site footer and
+  pricing page. The Vanta page is client-rendered and returned no extractable
+  certification text to a direct fetch, so certifications below are recorded from
+  Lightsprint's own published statements rather than from the trust center body.
+certifications:
+- name: SOC 2 Type II
+  status: in_progress
+  certified: false
+  evidence: 'https://lightsprint.ai/pricing — "SOC 2 Type II In Progress · See trust
+    center"'
+evidence:
+- {source: 'https://lightsprint.ai/pricing', kind: vendor-statement, detail: 'SOC 2 Type
+    II (in progress) listed under the Enterprise plan'}
+- {source: 'https://lightsprint.ai/', kind: footer-link, detail: links to the Vanta
+    trust center}
+- {source: 'https://app.vanta.com/lightsprint.ai/trust/qxpamv7k3cq49uprlla9yh', kind: trust-center,
+  status: 200, detail: client-rendered; no certifications extractable from a direct fetch}
+enterprise_security_controls:
+  source: https://lightsprint.ai/pricing
+  published:
+  - audit logs and access controls
+  - custom setup of cloud environment for the customer codebase
+  - on-premise / VPC deployment
+caveat: >-
+  No certification is currently held. Per the enrichment contract no `Compliance`
+  pointer is emitted, because an in-progress audit is not a published compliance
+  program. Re-check this on the next pass — a completed SOC 2 Type II would earn it.

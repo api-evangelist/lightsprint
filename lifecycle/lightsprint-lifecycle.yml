@@ -1,0 +1,51 @@
+generated: '2026-07-19'
+method: searched
+source: https://lightsprint.ai/
+notes: >-
+  Lightsprint is a Y Combinator Spring 2026 company; its API surface is young and
+  largely undocumented publicly. Every field below reflects an actual probe or an
+  actual published statement — absences are recorded as null/false rather than assumed.
+versioning:
+  scheme: unversioned-path
+  current: null
+  docs: null
+  evidence: all observed endpoints sit under a bare /api/ prefix with no version
+    segment, version header, or date pin
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: no deprecation or sunset policy is published
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  probed:
+  - {url: 'https://status.lightsprint.ai/', status: 404}
+  note: no status page found
+changelog:
+  url: null
+  probed:
+  - {url: 'https://lightsprint.ai/changelog', status: 404}
+  note: >-
+    No dated changelog is published. The company blog at https://lightsprint.ai/blog
+    is the only running update surface; no changelog/ artifact is emitted.
+client_versioning:
+  note: >-
+    The published clients are versioned independently on npm — lightsprint 0.6.4 and
+    n8n-nodes-lightsprint 0.1.5 (both pre-1.0) — which is the only version signal
+    Lightsprint currently exposes.
+  packages: packages/lightsprint-packages.yml
+deprecated_operations: []
+maturity:
+  stage: early
+  evidence:
+  - Y Combinator Spring 2026 batch
+  - GitHub org SprintsAI created 2025-12-08
+  - both published client packages are pre-1.0
+  - 'SOC 2 Type II listed as "in progress" on the pricing page'
+gaps:
+- No public API reference, no versioning policy, no deprecation policy, no status page,
+  no changelog, no SLA. These are the highest-value operational-transparency gaps for
+  this provider.

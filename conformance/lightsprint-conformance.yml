@@ -1,0 +1,62 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  https://github.com/SprintsAI/n8n-nodes-lightsprint and https://lightsprint.ai/pricing
+notes: >-
+  Standards assertions derived from the provider's published OAuth credential
+  definition and observed API shape. Lightsprint publishes no compliance program, so no
+  Compliance pointer is emitted — SOC 2 Type II is stated as "in progress", which is
+  not a published certification.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: published authorization-code flow with authorizationUrl
+    https://lightsprint.ai/oauth/authorize and tokenUrl https://lightsprint.ai/oauth/token
+- id: oauth2-authorization-server-metadata-rfc8414
+  conforms: false
+  evidence: /.well-known/oauth-authorization-server returns 404
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404; no id_token or openid scope
+    in the published scope set
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: no published error contract; no application/problem+json observed
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no deprecation or sunset policy published
+- id: rest-json
+  conforms: true
+  evidence: JSON over HTTPS with resource paths and GET/POST/PATCH/DELETE verb semantics
+- id: pagination
+  conforms: true
+  evidence: documented limit/offset with a server-enforced max of 100, plus NDJSON
+    streaming for full-set reads
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key header or retry-safety contract in any published client
+    source or skill doc
+- id: json-api
+  conforms: false
+  evidence: response shapes are plain JSON, not JSON:API envelopes
+- id: openapi
+  conforms: false
+  evidence: no OpenAPI or Swagger document published at any probed location
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming, or webhook surface documented
+- id: mcp
+  conforms: false
+  evidence: >-
+    Lightsprint ships a Claude Code plugin with Agent Skills, not an MCP server; no
+    hosted or local MCP endpoint is published
+compliance_programs:
+- name: SOC 2 Type II
+  status: in_progress
+  published_certification: false
+  evidence: 'https://lightsprint.ai/pricing — "SOC 2 Type II (in progress)" listed
+    under the Enterprise plan and in the page footer'
+  trust_center: security/lightsprint-trust-center.yml

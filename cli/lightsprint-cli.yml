@@ -1,0 +1,77 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/SprintsAI/lightsprint-claude-code-plugin/blob/main/README.md
+name: lightsprint
+description: >-
+  First-party CLI that connects a local Claude Code session to a Lightsprint
+  workspace board. Doubles as the Claude Code plugin installer; every
+  `/lightsprint:` slash command shells out to this binary.
+package: packages/lightsprint-packages.yml
+repository: https://github.com/SprintsAI/lightsprint-claude-code-plugin
+install:
+- method: npx
+  command: npx lightsprint
+  recommended: true
+- method: npx-non-interactive
+  command: npx -y lightsprint
+- method: curl
+  command: curl -fsSL https://raw.githubusercontent.com/SprintsAI/lightsprint-claude-code-plugin/main/install.sh
+    | bash
+requirements:
+  node: '>=18'
+  claude_code: 'required for the /lightsprint: slash commands'
+configuration:
+  base_url_env: LIGHTSPRINT_BASE_URL
+  base_url_default: https://app.lightsprint.ai
+  base_url_note: overridable for self-hosted / VPC instances
+  connection_file: ~/.lightsprint/connection.json
+auth:
+  style: on-demand browser OAuth 2.0 authorization-code flow
+  behavior: first `/lightsprint:` command without an active connection opens the browser
+    to authorize; tokens are saved locally and refresh automatically
+  scope_unit: workspace
+  see: authentication/lightsprint-authentication.yml
+commands:
+- group: connection
+  commands:
+  - {name: connect, description: Authorize and select/switch the active workspace}
+  - {name: disconnect, description: Clear the active workspace connection}
+  - {name: status, description: Show which workspace is currently connected}
+  - {name: whoami, description: Show the authenticated identity and workspace}
+- group: tasks
+  commands:
+  - name: tasks
+    description: List tasks from the workspace board (root tasks only by default)
+    flags: [--status, --complexity, --assignee, --mine, --unassigned, --deps, --project,
+      --stack, --sort, --limit, --offset, --page-all, --fields, --output]
+  - name: create
+    aliases: [create-task, new, add]
+    description: Create a task in the workspace default stack
+    flags: [--title, --description, --complexity, --status, --project, --stack, --depends-on,
+      --parent, --json-body, --dry-run, --output]
+  - name: update
+    description: Update a task's fields or dependencies
+    flags: [--task, --title, --description, --status, --complexity, --assignee, --project,
+      --position, --add-dep, --remove-dep, --json-body, --dry-run, --output]
+  - {name: get, description: Get full details of a task, flags: [--task, --fields, --output]}
+  - {name: claim, description: 'Claim a task: set in_progress, assign it, and link the
+      Claude Code session'}
+  - {name: comment, description: Add a comment to a task}
+- group: organization
+  commands:
+  - {name: projects, description: List projects in the workspace}
+  - {name: stacks, description: List stacks in the workspace}
+  - {name: 'stacks get', description: Inspect a stack by stackId, task prefix, or name}
+key_flows:
+- name: claim-and-sync
+  description: >-
+    `lightsprint claim <id>` sets the Lightsprint task to in_progress and creates a
+    Claude Code task carrying `metadata: { lightsprint_task_id: "<id>" }`; subsequent
+    Claude Code TaskUpdate calls sync back to the matching Lightsprint task.
+- name: scripted-output
+  description: >-
+    `--output json` returns structured JSON on every command; `--page-all` streams the
+    full task set as NDJSON (one JSON object per line), bypassing --limit/--offset.
+- name: dry-run
+  description: '`--dry-run` validates inputs on create/update without calling the API.'
+skills: skills/_index.yml
