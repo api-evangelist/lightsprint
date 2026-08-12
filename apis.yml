@@ -69,6 +69,8 @@ apis:
   - {type: Conventions, url: conventions/lightsprint-conventions.yml}
   - {type: DataModel, url: data-model/lightsprint-data-model.yml}
 common:
+- type: MCPServer
+  url: mcp/lightsprint-mcp.yml
 - {type: DeveloperPortal, url: 'https://lightsprint.ai/'}
 - {type: Documentation, url: 'https://github.com/SprintsAI/lightsprint-claude-code-plugin#readme'}
 - {type: GettingStarted, url: 'https://github.com/SprintsAI/lightsprint-claude-code-plugin#quick-start'}
