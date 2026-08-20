@@ -59,6 +59,11 @@ apis:
   humanURL: https://lightsprint.ai/
   baseURL: https://lightsprint.ai/api
   tags:
+  - Task
+  - Comments
+  - Agents
+  - Project
+  tags_raw:
   - Tasks
   - Comments
   - Agents
