@@ -14,6 +14,17 @@ description: >-
   Agent Skills, and an n8n community node. Lightsprint was founded by Ben Ong, Benedict
   Chan, and Heng Hong Lee, and went through Y Combinator's Spring 2026 batch.
 url: https://raw.githubusercontent.com/api-evangelist/lightsprint/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: open
