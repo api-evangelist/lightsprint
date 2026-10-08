@@ -88,3 +88,40 @@ notes:
 - >-
   Bring-your-own-API-key (BYOK) from the Team tier up lets customers route model spend
   through their own provider accounts.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  - subscription
+  units:
+  - credit
+  - negotiated
+  - seat
+  plans:
+  - name: Hobbyist
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - credit
+    - seat
+    periods:
+    - month
+  - name: Team
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - credit
+    - seat
+    periods:
+    - month
+  - name: Enterprise
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units:
+    - negotiated
+    periods:
+    - year
